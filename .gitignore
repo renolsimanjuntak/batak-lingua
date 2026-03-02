@@ -1,0 +1,24 @@
+# --- Batak Lingua - .gitignore ---
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log*
+
+.env
+dist/
+build/
+out/
+
+*.log
+logs/
