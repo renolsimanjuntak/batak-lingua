@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Renol Simanjuntak">
+    <meta name="description" content="Transliterasi Aksara Batak">
+    <title>Batak Lingua - Renol Simanjuntak</title>
+    <style>
+        :root {
+            --primary: #c0392b; 
+            --dark: #2c3e50;
+            --white: #ffffff;
+            --gray: #7f8c8d;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar {
+            width: 100%;
+            background: var(--dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            justify-content: center;
+            scrollbar-width: none;
+        }
+        .navbar::-webkit-scrollbar { display: none; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            display: block;
+            color: #bdc3c7;
+            padding: 18px 20px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .nav-links li a:hover, .nav-links li a.active { color: var(--white); }
+        .nav-links li a.active { border-bottom: 4px solid var(--primary); background: rgba(255,255,255,0.05); }
+
+        .container { 
+            background: var(--white); 
+            width: 90%;
+            max-width: 650px;
+            padding: 40px; 
+            margin: 40px 20px 20px 20px;
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 8px solid var(--primary);
+            box-sizing: border-box;
+        }
+
+        h1 { color: var(--dark); text-align: center; margin: 0; font-size: 2.2em; letter-spacing: -1px; }
+        .subtitle { text-align: center; color: var(--gray); margin-bottom: 30px; font-weight: 300; }
+
+        textarea { 
+            width: 100%; height: 130px; padding: 18px; border: 2px solid #edf2f7; border-radius: 12px; 
+            font-size: 18px; box-sizing: border-box; transition: 0.3s; background: #f8fafc; resize: none;
+        }
+        textarea:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.1); }
+
+        .output-box { padding: 25px; border: 2px solid #edf2f7; border-radius: 12px; margin-top: 25px; text-align: center; background: #fff; }
+        #output { font-size: 42px; color: var(--dark); margin-bottom: 20px; min-height: 60px; word-wrap: break-word; line-height: 1.4; }
+
+        .btn-copy { 
+            padding: 12px 30px; background: var(--dark); color: white; border: none; border-radius: 50px; 
+            cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-copy:hover { background: var(--primary); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        .info-box {
+            width: 90%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.8);
+            border-left: 6px solid var(--dark);
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .info-box h4 { margin: 0 0 8px 0; color: var(--dark); font-size: 14px; text-transform: uppercase; }
+        .info-box p { margin: 0; color: #4a5568; font-size: 13px; line-height: 1.6; }
+
+        .simple-footer {
+            text-align: center;
+            margin: 20px 0 40px 0;
+            font-size: 12px;
+            color: var(--dark);
+            opacity: 0.8;
+        }
+
+        #toast { visibility: hidden; min-width: 220px; background: #333; color: #fff; text-align: center; border-radius: 10px; padding: 16px; position: fixed; z-index: 1001; bottom: 40px; font-size: 14px; }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 40px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 40px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        @media (max-width: 600px) {
+            .navbar { justify-content: flex-start; }
+            .container { padding: 30px 20px; width: 92%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="#toba" class="nav-item active" data-dialect="toba">Toba</a></li>
+            <li><a href="#simalungun" class="nav-item" data-dialect="simalungun">Simalungun</a></li>
+            <li><a href="#angkola" class="nav-item" data-dialect="angkola">Angkola</a></li>
+            <li><a href="#karo" class="nav-item" data-dialect="karo">Karo</a></li>
+            <li><a href="#pakpak" class="nav-item" data-dialect="pakpak">Pakpak</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Batak Lingua</h1>
+        <p class="subtitle">Transliterasi Aksara Batak </p>
+
+        <textarea id="input" placeholder="Ketik kalimat latin di sini..."></textarea>
+
+        <div class="output-box">
+            <div id="output"></div>
+            <button class="btn-copy" id="btnCopy">Salin Aksara</button>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h4>Tentang Lisensi</h4>
+        <p>
+            Perangkat lunak ini bersifat sumber terbuka (open-source) di bawah lisensi MIT. 
+            Anda bebas menggunakan dan memodifikasi kode ini dengan tetap mencantumkan kredit penulis asli.
+        </p>
+    </div>
+
+    <div class="simple-footer">
+        &copy; 2026 Batak Lingua. MIT License.
+    </div>
+
+    <div id="toast">Aksara berhasil disalin!</div>
+
+    <script type="module" src="./src/toba-converter.js"></script>
+    <script>
+        const btnCopy = document.getElementById('btnCopy');
+        const outputDiv = document.getElementById('output');
+        const toast = document.getElementById('toast');
+
+        btnCopy.onclick = () => {
+            const text = outputDiv.innerText;
+            if (text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    toast.className = "show";
+                    setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+                });
+            }
+        };
+
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+    </script>
+</body>
+                                                                                    </html>
